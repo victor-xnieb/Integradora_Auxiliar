@@ -4,21 +4,12 @@ public class Driver extends Person implements Comparable<Driver>, Identifiable {
     private Vehicle vehicle;
     private DriverStatus status;
 
-    public Driver(String id, String name, String driverStatus) {
+    public Driver(String id, String name, Vehicle vehicle, DriverStatus driverStatus) {
         super(id, name);
-        this.status = convertToDriverStatus(driverStatus);
+        this.vehicle = vehicle;
+        this.status = driverStatus;
     }
 
-
-    public DriverStatus convertToDriverStatus(String status) {
-        if(status.equals("AVAILABLE")) {
-            return DriverStatus.AVAILABLE;
-        } else if (status.equals("ON_ROUTE")) {
-            return DriverStatus.ON_ROUTE;
-        } else {
-            return null;
-        }
-    }
 
     public DriverStatus getStatus() {
         return status;
@@ -48,9 +39,9 @@ public class Driver extends Person implements Comparable<Driver>, Identifiable {
 
     @Override
     public String toString() {
-        return "Name: " + super.getName() + ", ID: " + super.getId() +
-                ", Status: " + status.toString() + ", Vehicle: " +
-                vehicle;
+        return "Name: " + super.getName() + "\nID: " + super.getId() +
+                "\nStatus: " + status.toString() + "\nVehicle: " +
+                vehicle.toString();
 
     }
 }

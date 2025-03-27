@@ -27,5 +27,11 @@ public class Passenger extends Person implements Comparable<Passenger>, Identifi
     public String getIdentification() {
         return super.getId();
     }
+
+    @Override
+    public String toString() {
+        return "ID: " + super.getId() + "\nName: " + super.getName() +
+                ",\nAssigned Route: " + this.assignedRoute.toString() + "\nContact: " + this.contact;
+    }
 }
 

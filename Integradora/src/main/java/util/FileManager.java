@@ -3,7 +3,7 @@ package util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.*;
-import structures.DoublyLinkedList;
+import structures.DoubleLinkedList;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -70,7 +70,7 @@ public class FileManager {
     }
 
 
-    private <T extends Comparable<T> & Identifiable> List<T> toList(DoublyLinkedList<T> list) {
+    private <T extends Comparable<T> & Identifiable> List<T> toList(DoubleLinkedList<T> list) {
         List<T> result = new ArrayList<>();
 
         if(list.isEmpty()) return result;
@@ -85,8 +85,8 @@ public class FileManager {
     }
 
 
-    private <T extends Comparable<T> & Identifiable> DoublyLinkedList<T> toDoublyLinkedList(List<T> list) {
-        DoublyLinkedList<T> linkedList = new DoublyLinkedList<>();
+    private <T extends Comparable<T> & Identifiable> DoubleLinkedList<T> toDoublyLinkedList(List<T> list) {
+        DoubleLinkedList<T> linkedList = new DoubleLinkedList<>();
         if (list != null) {
             for (T item : list) {
                 linkedList.add(item);
@@ -96,50 +96,50 @@ public class FileManager {
     }
 
 
-    public String saveRoutes(DoublyLinkedList<Route> routes) {
+    public String saveRoutes(DoubleLinkedList<Route> routes) {
         return saveToJson(dataRoutes, toList(routes));
     }
 
-    public String saveIncidents(String fileName, DoublyLinkedList<SecurityIncident> incidents) {
-        Path path = dataFolder.resolve(fileName);
-        return saveToJson(path, toList(incidents));
+    public String saveIncidents(DoubleLinkedList<SecurityIncident> incidents) {
+        //Path path = dataFolder.resolve(fileName);
+        return saveToJson(dataIncidents,toList(incidents));
     }
 
-    public String savePassengers(String fileName, DoublyLinkedList<Passenger> passengers) {
-        Path path = dataFolder.resolve(fileName);
-        return saveToJson(path, toList(passengers));
+    public String savePassengers(DoubleLinkedList<Passenger> passengers) {
+        //Path path = dataFolder.resolve(fileName);
+        return saveToJson(dataPassengers, toList(passengers));
     }
 
-    public String saveDrivers(String fileName, DoublyLinkedList<Driver> drivers) {
-        Path path = dataFolder.resolve(fileName);
-        return saveToJson(path, toList(drivers));
+    public String saveDrivers(DoubleLinkedList<Driver> drivers) {
+        //Path path = dataFolder.resolve(fileName);
+        return saveToJson(dataDrivers, toList(drivers));
     }
 
-    public DoublyLinkedList<Route> loadRoutes(String fileName) {
-        Path filePath = dataFolder.resolve(fileName);
+    public DoubleLinkedList<Route> loadRoutes() {
+        //Path filePath = dataFolder.resolve(fileName);
         Type type = new TypeToken<List<Route>>() {}.getType();
         List<Route> tempList = loadFromJson(dataRoutes, type);
         return toDoublyLinkedList(tempList);
     }
 
-    public DoublyLinkedList<SecurityIncident> loadSecurityIncidents(String fileName) {
-        Path filePath = dataFolder.resolve(fileName);
+    public DoubleLinkedList<SecurityIncident> loadSecurityIncidents() {
+        //Path filePath = dataFolder.resolve(fileName);
         Type type = new TypeToken<List<SecurityIncident>>() {}.getType();
-        List<SecurityIncident> tempList = loadFromJson(filePath, type);
+        List<SecurityIncident> tempList = loadFromJson(dataIncidents, type);
         return toDoublyLinkedList(tempList);
     }
 
-    public DoublyLinkedList<Passenger> loadPassengers(String fileName) {
-        Path filePath = dataFolder.resolve(fileName);
+    public DoubleLinkedList<Passenger> oadPassengers() {
+        //Path filePath = dataFolder.resolve(fileName);
         Type type = new TypeToken<List<Passenger>>() {}.getType();
-        List<Passenger> tempList = loadFromJson(filePath, type);
+        List<Passenger> tempList = loadFromJson(dataPassengers, type);
         return toDoublyLinkedList(tempList);
     }
 
-    public DoublyLinkedList<Driver> loadDrivers(String fileName) {
-        Path filePath = dataFolder.resolve(fileName);
+    public DoubleLinkedList<Driver> loadDrivers() {
+        //Path filePath = dataFolder.resolve(fileName);
         Type type = new TypeToken<List<Driver>>() {}.getType();
-        List<Driver> tempList = loadFromJson(filePath, type);
+        List<Driver> tempList = loadFromJson(dataDrivers, type);
         return toDoublyLinkedList(tempList);
     }
 }

@@ -1,59 +1,157 @@
 package model;
 
-import structures.DoublyLinkedList;
+import exceptions.*;
+import structures.DoubleLinkedList;
 import util.FileManager;
 
+import java.text.ParseException;
 import java.util.Comparator;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Controller {
 
-    private DoublyLinkedList<Route> routes;
-    private DoublyLinkedList<SecurityIncident> securityIncidents;
-    private DoublyLinkedList<Passenger> passengers;
-    private DoublyLinkedList<Driver> drivers;
+    private final DoubleLinkedList<Route> routes;
+    private final DoubleLinkedList<SecurityIncident> securityIncidents;
+    private final DoubleLinkedList<Passenger> passengers;
+    private final DoubleLinkedList<Driver> drivers;
 
-    private FileManager fileManager;
+    private final FileManager fileManager;
 
     public Controller() {
         System.out.println("Hola controller");
-        this.routes = new DoublyLinkedList<>();
-        this.securityIncidents = new DoublyLinkedList<>();
-        this.passengers = new DoublyLinkedList<>();
-        this.drivers = new DoublyLinkedList<>();
+        this.routes = new DoubleLinkedList<>();
+        this.securityIncidents = new DoubleLinkedList<>();
+        this.passengers = new DoubleLinkedList<>();
+        this.drivers = new DoubleLinkedList<>();
         this.fileManager = new FileManager();
 
     }
 
 
-    //Routes Managment
-    public String saveRoutesToJson(String fileName){
+    public DoubleLinkedList<Route> getRoutes() {
+        return routes;
+    }
+
+
+    public DoubleLinkedList<SecurityIncident> getSecurityIncidents() {
+        return securityIncidents;
+    }
+
+
+    public DoubleLinkedList<Passenger> getPassengers() {
+        return passengers;
+    }
+
+
+    public DoubleLinkedList<Driver> getDrivers() {
+        return drivers;
+    }
+
+    //Routes management
+
+    public String saveRoutesToJson(){
         return fileManager.saveRoutes(routes);
     }
 
-    public DoublyLinkedList<Route> loadRoutesFromJson(String fileName) {
-        return fileManager.loadRoutes(fileName);
+    public DoubleLinkedList<Route> loadRoutesFromJson() {
+        return fileManager.loadRoutes();
     }
 
     public Route createRoute(String id, double distance, int time,String startPlace,String endPlace) {
         return new Route(id,distance,time,startPlace,endPlace);
     }
 
-    public boolean addRoute(Route route) {
-        return addObject(route,routes);
+    public boolean addRoute(Route route) throws RouteAlreadyExistsException {
+        if(addObject(route,routes)){
+            return true;
+        } else {
+            throw new RouteAlreadyExistsException("The route is already in the system.");
+        }
     }
 
-    //Incidents Managment
-    public String saveSecurityIncidentsToJson(String fileName) {
-        return fileManager.saveIncidents(fileName, securityIncidents);
+
+    //Incidents management
+
+    public String saveSecurityIncidentsToJson() {
+        return fileManager.saveIncidents(securityIncidents);
     }
 
-    public String savePassengersToJson(String fileName) {
-        return fileManager.savePassengers(fileName, passengers);
+    public DoubleLinkedList<SecurityIncident> loadIncidentsFromJson() {
+        return fileManager.loadSecurityIncidents();
     }
 
-    //public SecurityIncident createSecurityIncident()
+    public SecurityIncident createSecurityIncident(String id, TypeOfIncident type, String location,Date reportDateTime, String description, IncidentStatus status) {
+        return new SecurityIncident(id,type,location,reportDateTime,description,status);
+    }
 
-    public <T extends Comparable<T> & Identifiable> boolean addObject(T object, DoublyLinkedList<T> list) {
+    public boolean addSecurityIncident(SecurityIncident incident) throws IncidentAlreadyExistsException {
+        if(addObject(incident,securityIncidents)) {
+            return true;
+        } else {
+            throw new IncidentAlreadyExistsException("The security incident is already in the system.");
+        }
+    }
+
+    //***************************************************++
+
+
+    //Passengers management
+
+    public String savePassengersToJson() {
+        return fileManager.savePassengers(passengers);
+    }
+
+
+    public DoubleLinkedList<Passenger> loadPassengersFromJson() {
+        return fileManager.loadPassengers();
+    }
+
+    public Passenger createPassenger(String id, String name,Route route, String contact){
+        return new Passenger(id,name,route,contact);
+    }
+
+    public boolean addPassenger(Passenger passenger) throws PassengerAlreadyExistsException {
+
+        if(addObject(passenger,passengers)) {
+            return true;
+        } else {
+            throw new PassengerAlreadyExistsException("The passenger is already in the system.");
+        }
+
+    }
+
+    //************************************************************
+
+
+    //Driver management
+
+    public String saveDriversToJson() {
+        return fileManager.saveDrivers(drivers);
+    }
+
+
+    public DoubleLinkedList<Driver> loadDriversFromJson() {
+        return fileManager.loadDrivers();
+    }
+
+    public Driver createDriver(String id, String name, Vehicle vehicle, DriverStatus driverStatus) {
+        return new Driver(id,name,vehicle,driverStatus);
+    }
+
+    public Vehicle createVehicle(String licensePlate, String brand) {
+        return new Vehicle(licensePlate,brand);
+    }
+
+    public boolean addDriver(Driver driver) throws DriverAlreadyExistsException{
+        if(addObject(driver,drivers)) {
+            return true;
+        } else {
+            throw new DriverAlreadyExistsException("The passenger is already in the system.");
+        }
+    }
+
+    public <T extends Comparable<T> & Identifiable> boolean addObject(T object, DoubleLinkedList<T> list) {
         boolean isAdded = false;
 
         if(list.search(object) == null) {
@@ -63,27 +161,14 @@ public class Controller {
         return isAdded;
     }
 
-    public String saveDriversToJson(String fileName) {
-        return fileManager.saveDrivers(fileName, drivers);
-    }
 
 
-    public DoublyLinkedList<SecurityIncident> loadIncidentsFromJson(String fileName) {
-        return fileManager.loadSecurityIncidents(fileName);
-    }
 
 
-    public DoublyLinkedList<Passenger> loadPassengersFromJson(String fileName) {
-        return fileManager.loadPassengers(fileName);
-    }
 
 
-    public DoublyLinkedList<Driver> loadDriversFromJson(String fileName) {
-        return fileManager.loadDrivers(fileName);
-    }
 
-
-    public <T extends Comparable<T> & Identifiable> String addObjectsLoaded(DoublyLinkedList<T> listLoaded, DoublyLinkedList<T> list) {
+    public <T extends Comparable<T> & Identifiable> String addObjectsLoaded(DoubleLinkedList<T> listLoaded, DoubleLinkedList<T> list) {
         if(listLoaded.isEmpty()) {
             return "No information was saved in the system because the json file is empty.";
         } else {
@@ -114,29 +199,14 @@ public class Controller {
 
 
 
-    public boolean addSecurityIncident(SecurityIncident incident) {
-        return securityIncidents.add(incident);
-    }
-
-
-    public boolean addPassenger(Passenger passenger) {
-        return passengers.add(passenger);
-    }
-
-
-    public boolean addDriver(Driver driver) {
-        return drivers.add(driver);
-    }
-
-
     public String searchSecurityIncident(String incidentID) {
         sortIncidentsByID();
 
-        String msg="";
+        String msg="No incident found with that ID";
         boolean isFound = false;
 
         if (securityIncidents.isEmpty()){
-            msg= "The list does not have information";
+            msg= "\n\nThere Are not incidents saved in the system. please, add or load some incidents to do the search.\n\n";
         } else {
 
             int left = 0;
@@ -165,11 +235,11 @@ public class Controller {
     public String searchDriver(String driverName) {
         sortDriversByName();
 
-        String msg="";
+        String msg="No driver found with that name";
         boolean isFound = false;
 
         if (drivers.isEmpty()){
-            msg= "The list does not have information";
+            msg= "\n\nThere Are not drivers saved in the system. please, add or load some drivers to do the search.\n\n";
         } else {
 
             int left = 0;
@@ -209,22 +279,6 @@ public class Controller {
         return routes.getFirst().getData().toString();
     }
 
-    public DoublyLinkedList<Route> getRoutes() {
-        return routes;
-    }
-
-    public DoublyLinkedList<SecurityIncident> getSecurityIncidents() {
-        return securityIncidents;
-    }
-
-    public DoublyLinkedList<Passenger> getPassengers() {
-        return passengers;
-    }
-
-    public DoublyLinkedList<Driver> getDrivers() {
-        return drivers;
-    }
-
 
     public String sortDriversByName() {
         return drivers.sortList();
@@ -236,6 +290,82 @@ public class Controller {
 
     public String sortIncidentsByDateAndTime() {
         return securityIncidents.sortList();
+    }
+
+
+    public TypeOfIncident convertToTypeOfIncident(String typeString) {
+        TypeOfIncident typeOfIncident = null;
+
+        for(TypeOfIncident type:TypeOfIncident.values()) {
+            if(typeString.equals(type.toString())) {
+                typeOfIncident = type;
+            }
+        }
+
+        return typeOfIncident;
+    }
+
+
+    public Date convertToDate(String dateString) {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date localDate = null;
+
+        try {
+            localDate = dateFormat.parse(dateString);
+
+        } catch (ParseException e) {
+        }
+
+        return localDate;
+    }
+
+
+    public IncidentStatus convertToIncidentStatus(String statusString) {
+        IncidentStatus incidentStatus = null;
+
+        for(IncidentStatus status:IncidentStatus.values()) {
+            if(statusString.equals(status.toString())) {
+                incidentStatus = status;
+            }
+        }
+
+        return incidentStatus;
+    }
+
+    public DriverStatus convertToDriverStatus(String statusString) {
+        DriverStatus driverStatus = null;
+
+        for(DriverStatus status:DriverStatus.values()) {
+            if(statusString.equals(status.toString())) {
+                driverStatus = status;
+            }
+        }
+
+        return driverStatus;
+    }
+
+    public boolean thereAreRoutesCreated() {
+        return !routes.isEmpty();
+    }
+
+    public String getRoutesToString() {
+        return routes.getData();
+    }
+
+    public Route searchRouteByID(String routeID) {
+        int n = routes.getSize();
+        Route routeFind = null;
+        boolean routeIsFind = false;
+
+        for(int i=0; i<n && !routeIsFind ;i++) {
+            if(routes.get(i).getId().equalsIgnoreCase(routeID)) {
+                routeFind = routes.get(i);
+                routeIsFind = true;
+            }
+        }
+
+        return routeFind;
     }
 
 

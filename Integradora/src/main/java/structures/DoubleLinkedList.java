@@ -1,18 +1,15 @@
 package structures;
 
 import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
-import model.Driver;
 import model.Identifiable;
 
-public class DoublyLinkedList<T extends Comparable<T> & Identifiable>{
+public class DoubleLinkedList<T extends Comparable<T> & Identifiable>{
     private Node<T> first;
     private Node<T> last;
     private int size;
 
-    public DoublyLinkedList() {
+    public DoubleLinkedList() {
         this.first = null;
         this.last = null;
         this.size = 0;

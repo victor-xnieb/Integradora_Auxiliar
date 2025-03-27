@@ -1,25 +1,24 @@
 package model;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+
 import model.Identifiable;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 
 
 public class SecurityIncident implements Comparable<SecurityIncident> , Identifiable {
     private String id;
     private TypeOfIncident type;
     private String location;
-    private LocalDate reportDate;
-    private LocalTime reportTime;
+    private Date reportDateTime;
     private String description;
     private IncidentStatus status;
 
-    public SecurityIncident(String id, TypeOfIncident type, String location, String description, IncidentStatus status) {
+    public SecurityIncident(String id, TypeOfIncident type, String location,Date reportDateTime, String description, IncidentStatus status) {
         this.id = id;
         this.type = type;
         this.location = location;
-        this.reportDate = LocalDate.now();
-        this.reportTime = LocalTime.now();
+        this.reportDateTime = reportDateTime;
         this.description = description;
         this.status = status;
     }
@@ -33,31 +32,17 @@ public class SecurityIncident implements Comparable<SecurityIncident> , Identifi
         this.id = id;
     }
 
-    public LocalDate getReportDate() {
-        return reportDate;
+    public Date getReportDateTime() {
+        return reportDateTime;
     }
 
-    public void setReportDate(LocalDate reportDate) {
-        this.reportDate = reportDate;
-    }
-
-    public LocalTime getReportTime() {
-        return reportTime;
-    }
-
-    public void setReportTime(LocalTime reportTime) {
-        this.reportTime = reportTime;
+    public void setReportDateTime(Date reportDateTime) {
+        this.reportDateTime = reportDateTime;
     }
 
     @Override
     public int compareTo(SecurityIncident incident) {
-        int compare = this.reportDate.compareTo(incident.getReportDate());
-
-        if(compare==0) {
-            compare = this.reportTime.compareTo(incident.getReportTime());
-        }
-
-        return compare;
+        return this.reportDateTime.compareTo(incident.getReportDateTime());
     }
 
     @Override
@@ -67,9 +52,16 @@ public class SecurityIncident implements Comparable<SecurityIncident> , Identifi
 
     @Override
     public String toString() {
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm"); // Solo horas y minutos
+
+        String date = dateFormat.format(reportDateTime); // Extrae la fecha
+        String time = timeFormat.format(reportDateTime);
+
         return "ID: " + this.id + ", Type of Incident: " + type.toString() +
-                ", Location: " + location + ", Report date: " + reportDate.toString() +
-                ", Report time: " + reportTime + ", Description: " + description +
+                ", Location: " + location + ", Report date: " + date +
+                ", Report time: " + time + ", Description: " + description +
                 ", Incident status: " + status.toString();
     }
 }
