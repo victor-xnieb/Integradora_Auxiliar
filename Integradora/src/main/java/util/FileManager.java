@@ -32,20 +32,48 @@ public class FileManager {
         gson = new Gson();
     }
 
-    public void initialize() throws IOException {
-        if (!Files.exists(dataFolder)) {
-            Files.createDirectories(dataFolder);
-        }
+    public FileManager(String folder, String directory) {
+
+        Path dataProject = Paths.get(System.getProperty("user.dir"));
+        dataFolder = dataProject.resolve("src/" + folder + "/" + directory);
+        dataRoutes = dataFolder.resolve("routes.json");
+        dataIncidents = dataFolder.resolve("incidents.json");
+        dataPassengers = dataFolder.resolve("passengers.json");
+        dataDrivers = dataFolder.resolve("drivers.json");
+        gson = new Gson();
+
     }
 
-    public void createFile(Path path) {
+
+    public boolean initialize(){
+        boolean folderCreated = false;
+
+        try {
+            if (!Files.exists(dataFolder)) {
+
+                Files.createDirectories(dataFolder);
+                folderCreated = true;
+            }
+        } catch (IOException e) {
+            return false;
+        }
+
+        return folderCreated;
+    }
+
+
+    public boolean createFile(Path path) {
+        boolean fileCreated = false;
         try {
             if (!Files.exists(path)) {
                 Files.createFile(path);
+                fileCreated = true;
             }
         } catch (IOException e) {
-            System.out.println("Failed to create file");
+            return false;
         }
+
+        return fileCreated;
     }
 
     private <T> String saveToJson(Path filePath, T data) {
@@ -129,7 +157,7 @@ public class FileManager {
         return toDoublyLinkedList(tempList);
     }
 
-    public DoubleLinkedList<Passenger> oadPassengers() {
+    public DoubleLinkedList<Passenger> loadPassengers() {
         //Path filePath = dataFolder.resolve(fileName);
         Type type = new TypeToken<List<Passenger>>() {}.getType();
         List<Passenger> tempList = loadFromJson(dataPassengers, type);
@@ -141,6 +169,30 @@ public class FileManager {
         Type type = new TypeToken<List<Driver>>() {}.getType();
         List<Driver> tempList = loadFromJson(dataDrivers, type);
         return toDoublyLinkedList(tempList);
+    }
+
+    public Path getDataFolder() {
+        return dataFolder;
+    }
+
+    public Path getDataRoutes() {
+        return dataRoutes;
+    }
+
+    public Path getDataIncidents() {
+        return dataIncidents;
+    }
+
+    public Path getDataPassengers() {
+        return dataPassengers;
+    }
+
+    public Path getDataDrivers() {
+        return dataDrivers;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }
 

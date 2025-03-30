@@ -18,6 +18,14 @@ public class Passenger extends Person implements Comparable<Passenger>, Identifi
         this.contact = contact;
     }
 
+    public Route getAssignedRoute() {
+        return assignedRoute;
+    }
+
+    public void setAssignedRoute(Route assignedRoute) {
+        this.assignedRoute = assignedRoute;
+    }
+
     @Override
     public int compareTo(Passenger passenger) {
         return 0;

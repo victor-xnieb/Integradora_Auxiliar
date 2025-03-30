@@ -19,7 +19,7 @@ public class Controller {
     private final FileManager fileManager;
 
     public Controller() {
-        System.out.println("Hola controller");
+
         this.routes = new DoubleLinkedList<>();
         this.securityIncidents = new DoubleLinkedList<>();
         this.passengers = new DoubleLinkedList<>();
@@ -58,11 +58,11 @@ public class Controller {
         return fileManager.loadRoutes();
     }
 
-    public Route createRoute(String id, double distance, int time,String startPlace,String endPlace) {
-        return new Route(id,distance,time,startPlace,endPlace);
+    public Route createRoute(double distance, int time,String startPlace,String endPlace) {
+        return new Route(distance,time,startPlace,endPlace);
     }
 
-    public boolean addRoute(Route route) throws RouteAlreadyExistsException {
+    public boolean addRoute(Route route) {
         if(addObject(route,routes)){
             return true;
         } else {
@@ -81,11 +81,11 @@ public class Controller {
         return fileManager.loadSecurityIncidents();
     }
 
-    public SecurityIncident createSecurityIncident(String id, TypeOfIncident type, String location,Date reportDateTime, String description, IncidentStatus status) {
-        return new SecurityIncident(id,type,location,reportDateTime,description,status);
+    public SecurityIncident createSecurityIncident(TypeOfIncident type, String location,Date reportDateTime, String description, IncidentStatus status) {
+        return new SecurityIncident(type,location,reportDateTime,description,status);
     }
 
-    public boolean addSecurityIncident(SecurityIncident incident) throws IncidentAlreadyExistsException {
+    public boolean addSecurityIncident(SecurityIncident incident) {
         if(addObject(incident,securityIncidents)) {
             return true;
         } else {
@@ -111,7 +111,7 @@ public class Controller {
         return new Passenger(id,name,route,contact);
     }
 
-    public boolean addPassenger(Passenger passenger) throws PassengerAlreadyExistsException {
+    public boolean addPassenger(Passenger passenger) {
 
         if(addObject(passenger,passengers)) {
             return true;
@@ -143,7 +143,7 @@ public class Controller {
         return new Vehicle(licensePlate,brand);
     }
 
-    public boolean addDriver(Driver driver) throws DriverAlreadyExistsException{
+    public boolean addDriver(Driver driver){
         if(addObject(driver,drivers)) {
             return true;
         } else {
@@ -276,6 +276,10 @@ public class Controller {
 
     public String searchBestRoute() {
         sortRouteByTravelTime();
+
+        if(routes.isEmpty()) {
+            return "There are no routes registered yet!";
+        }
         return routes.getFirst().getData().toString();
     }
 
@@ -368,6 +372,13 @@ public class Controller {
         return routeFind;
     }
 
+    public String printRoute() {
+        return routes.positionLast().toString();
+    }
+
+    public int getRoutesSize() {
+        return routes.getSize();
+    }
 
 }
 

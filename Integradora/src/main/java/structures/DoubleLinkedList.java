@@ -147,4 +147,14 @@ public class DoubleLinkedList<T extends Comparable<T> & Identifiable>{
         return getData();
 
     }
+
+    public T positionLast() {
+        return last.getData();
+    }
+
+    public Node<T> getLast() {
+        return last;
+    }
+
+
 }

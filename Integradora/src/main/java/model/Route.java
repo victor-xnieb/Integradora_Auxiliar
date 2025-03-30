@@ -1,11 +1,21 @@
 package model;
 
+import java.util.UUID;
+
 public class Route implements Comparable<Route>, Identifiable {
     private String id;
     private double distance;
     private int time;
     private String startPlace;
     private String endPlace;
+
+    public Route(double distance, int time, String startPlace, String endPlace) {
+        this.id = UUID.randomUUID().toString();;
+        this.distance = distance;
+        this.time = time;
+        this.startPlace = startPlace;
+        this.endPlace = endPlace;
+    }
 
     public Route(String id, double distance, int time, String startPlace, String endPlace) {
         this.id = id;

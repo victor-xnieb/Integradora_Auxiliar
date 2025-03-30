@@ -1,0 +1,1 @@
+[{"id":"1","type":"ACCIDENT","location":"Calle 1 # 2-3","reportDateTime":"Mar 1, 2025, 1:01:00 AM","description":"Car crash","status":"PENDING"},{"id":"2","type":"FIRE","location":"Calle 2 # 3-4","reportDateTime":"Feb 1, 2025, 5:01:00 AM","description":"Building on fire","status":"IN_PROCESS"}]

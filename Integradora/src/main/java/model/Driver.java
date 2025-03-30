@@ -10,7 +10,6 @@ public class Driver extends Person implements Comparable<Driver>, Identifiable {
         this.status = driverStatus;
     }
 
-
     public DriverStatus getStatus() {
         return status;
     }
@@ -42,7 +41,6 @@ public class Driver extends Person implements Comparable<Driver>, Identifiable {
         return "Name: " + super.getName() + "\nID: " + super.getId() +
                 "\nStatus: " + status.toString() + "\nVehicle: " +
                 vehicle.toString();
-
     }
 }
 

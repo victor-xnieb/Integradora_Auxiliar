@@ -27,10 +27,10 @@ public class Main {
         while(leave == false) {
             System.out.println("\n\n****************** MENU ******************\n\n" +
                     "Please choose an option.\n\n"+
-                    "1.Routes managment.\n" +
-                    "2.Security Incidents managment.\n" +
-                    "3.Passenger managment.\n" +
-                    "4.Drivers managment.\n" +
+                    "1.Routes management.\n" +
+                    "2.Security Incidents management.\n" +
+                    "3.Passenger management.\n" +
+                    "4.Drivers management.\n" +
                     "5.Sort routes by travel time.\n" +
                     "6.Sort incidents by date/time of the report\n" +
                     "7.Search incident by ID.\n" +
@@ -107,10 +107,6 @@ public class Main {
     }
 
     public void enterRouteManually() {
-
-        System.out.print("Enter the route ID: ");
-        String id = sc.nextLine();
-
         System.out.print("Enter the distance (km): ");
         double distance = sc.nextDouble();
 
@@ -125,12 +121,15 @@ public class Main {
         String endPlace = sc.nextLine();
 
         try {
-        controller.addRoute( controller.createRoute(id,distance,time,startPlace,endPlace));
+        controller.addRoute( controller.createRoute(distance,time,startPlace,endPlace));
+        System.out.println( controller.printRoute());
         System.out.println("\n\nRoute created and added to the system\n\n");
 
         } catch (RouteAlreadyExistsException e) {
             System.out.println("\n\nYou have already added this route before.\n\n");
         }
+
+        System.out.println(controller.getRoutesSize());
 
     }
 
@@ -178,9 +177,6 @@ public class Main {
     }
 
     public void enterSecurityIncidentManually() {
-        System.out.print("Enter the incident ID: ");
-        String id = sc.nextLine();
-
         String type = "";
         boolean methodflag = false;
 
@@ -232,7 +228,6 @@ public class Main {
 
         try{
             controller.addSecurityIncident(controller.createSecurityIncident(
-                    id,
                     controller.convertToTypeOfIncident(type),
                     location,
                     controller.convertToDate(reportDateTime),
